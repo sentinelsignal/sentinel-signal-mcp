@@ -1,8 +1,8 @@
 # Sentinel Signal MCP
 
-Python MCP tool server for the Sentinel Signal API.
+Python MCP server for Sentinel Signal scoring, limits, usage, and feedback tools.
 
-This package lets MCP-compatible agent clients call Sentinel Signal scoring and billing-aware utility endpoints through a local MCP server process.
+This package provides a drop-in stdio MCP server so agent clients can call the Sentinel Signal API through a local tool connector with environment-based auth.
 
 ## MVP tools
 
@@ -179,4 +179,3 @@ python -m twine upload dist/*
 - Do not commit real API keys or customer payloads.
 - Use placeholder values in client configs and examples.
 - The server only reads credentials from environment variables at runtime.
-
