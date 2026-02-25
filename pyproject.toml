@@ -27,9 +27,17 @@ dependencies = [
 Homepage = "https://sentinelsignal.io"
 Documentation = "https://sentinelsignal.io/portal"
 Repository = "https://github.com/sentinelsignal/sentinel-signal-mcp"
+Changelog = "https://github.com/sentinelsignal/sentinel-signal-mcp/blob/main/CHANGELOG.md"
 
 [project.scripts]
 sentinel-signal-mcp = "sentinel_signal_mcp.server:main"
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8,<9",
+  "build>=1,<2",
+  "twine>=5,<7",
+]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/sentinel_signal_mcp"]
