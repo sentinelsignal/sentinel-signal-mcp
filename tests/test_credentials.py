@@ -25,7 +25,7 @@ import sentinel_signal_mcp.credentials as credentials_mod
 def _settings(*, api_key: str | None = None, credentials_path: Path, no_trial: bool = False) -> Settings:
     return Settings(
         api_base_url="https://sentinelsignal.io",
-        token_base_url="https://sentinel-signal-token-service-prod.fly.dev",
+        token_base_url="https://token.sentinelsignal.io",
         api_key=api_key,
         credentials_path=credentials_path,
         no_trial=no_trial,
@@ -40,7 +40,7 @@ class CredentialsCacheTests(unittest.TestCase):
             payload = {
                 "api_key": "ss_trial_example",
                 "api_base_url": "https://sentinelsignal.io",
-                "token_base_url": "https://sentinel-signal-token-service-prod.fly.dev",
+                "token_base_url": "https://token.sentinelsignal.io",
             }
 
             save_cached_credentials(cred_path, payload)
@@ -69,20 +69,20 @@ class CredentialsCacheTests(unittest.TestCase):
 
         creds = {
             "api_base_url": "https://sentinelsignal.io/",
-            "token_base_url": "https://sentinel-signal-token-service-prod.fly.dev/",
+            "token_base_url": "https://token.sentinelsignal.io/",
         }
         self.assertTrue(
             bases_match(
                 creds,
                 api_base_url="https://sentinelsignal.io",
-                token_base_url="https://sentinel-signal-token-service-prod.fly.dev",
+                token_base_url="https://token.sentinelsignal.io",
             )
         )
         self.assertFalse(
             bases_match(
                 creds,
                 api_base_url="https://staging.sentinelsignal.io",
-                token_base_url="https://sentinel-signal-token-service-prod.fly.dev",
+                token_base_url="https://token.sentinelsignal.io",
             )
         )
 
@@ -114,7 +114,7 @@ class CredentialResolutionTests(unittest.IsolatedAsyncioTestCase):
                     "api_key": "ss_trial_cached",
                     "expires_at": expires_at,
                     "api_base_url": "https://sentinelsignal.io",
-                    "token_base_url": "https://sentinel-signal-token-service-prod.fly.dev",
+                    "token_base_url": "https://token.sentinelsignal.io",
                     "upgrade_url": "https://sentinelsignal.io/portal/dashboard",
                 },
             )
@@ -138,7 +138,7 @@ class CredentialResolutionTests(unittest.IsolatedAsyncioTestCase):
                 "upgrade_url": "https://sentinelsignal.io/portal/dashboard",
                 "limits": {"monthly_quota": 1000, "rps": 1, "burst": 5},
                 "api_base_url": "https://sentinelsignal.io",
-                "token_base_url": "https://sentinel-signal-token-service-prod.fly.dev",
+                "token_base_url": "https://token.sentinelsignal.io",
             }
 
             async def fake_fetch(_settings: Settings) -> dict:

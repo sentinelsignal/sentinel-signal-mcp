@@ -6,7 +6,7 @@ from pathlib import Path
 
 
 DEFAULT_API_BASE_URL = "https://sentinelsignal.io"
-DEFAULT_TOKEN_BASE_URL = "https://sentinel-signal-token-service-prod.fly.dev"
+DEFAULT_TOKEN_BASE_URL = "https://token.sentinelsignal.io"
 DEFAULT_CREDENTIALS_PATH = Path.home() / ".sentinel" / "credentials.json"
 DEFAULT_TIMEOUT_SECONDS = 30.0
 DEFAULT_USER_AGENT = "sentinel-signal-mcp/0.1.0"
