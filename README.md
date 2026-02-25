@@ -2,7 +2,10 @@
 
 Python MCP server for Sentinel Signal scoring, limits, usage, and feedback tools.
 
-This package provides a drop-in stdio MCP server so agent clients can call the Sentinel Signal API through a local tool connector with environment-based auth.
+This package provides a drop-in stdio MCP server so agent clients can call the Sentinel Signal API through a local tool connector. It supports either:
+
+- a user-provided `SENTINEL_API_KEY`, or
+- automatic no-signup trial key minting (`POST /v1/keys/trial`) with secure local credential caching
 
 ## MVP tools
 
@@ -14,12 +17,13 @@ This package provides a drop-in stdio MCP server so agent clients can call the S
 ## Quick start (uvx)
 
 1. Install `uv` (if needed): https://docs.astral.sh/uv/
-2. Set env vars:
+2. Set env vars (optional `SENTINEL_API_KEY`; if omitted, the server auto-mints a trial key and caches it):
 
 ```bash
-export SENTINEL_API_KEY="ss_live_or_test_api_key_here"
-export SENTINEL_API_BASE_URL="https://sentinelsignal.io"  # optional (default shown)
-export SENTINEL_TIMEOUT_SECONDS="30"                      # optional
+export SENTINEL_BASE_URL="https://sentinelsignal.io"                          # optional (default shown)
+export SENTINEL_TOKEN_BASE_URL="https://sentinel-signal-token-service-prod.fly.dev"  # optional (default shown)
+# export SENTINEL_API_KEY="ss_live_or_test_api_key_here"                       # optional
+export SENTINEL_TIMEOUT_SECONDS="30"                                           # optional
 ```
 
 3. Run the MCP server:
@@ -28,7 +32,15 @@ export SENTINEL_TIMEOUT_SECONDS="30"                      # optional
 uvx sentinel-signal-mcp
 ```
 
-Deliverable behavior: install tool -> set env vars -> agent can call `score_workflow`.
+Deliverable behavior: install tool -> (optionally set env vars) -> agent can call `score_workflow`.
+
+If no API key is configured, the MCP server resolves credentials in this order:
+
+1. `SENTINEL_API_KEY` env var
+2. cached trial key (`~/.sentinel/credentials.json` by default) if not expired and base URLs match
+3. mint a new trial key from `POST {SENTINEL_TOKEN_BASE_URL}/v1/keys/trial`
+
+Disable auto-trial with `SENTINEL_NO_TRIAL=1`.
 
 ## MCP client config snippets
 
@@ -43,8 +55,9 @@ Add this to your MCP config JSON (`mcpServers` section):
       "command": "uvx",
       "args": ["sentinel-signal-mcp"],
       "env": {
+        "SENTINEL_BASE_URL": "https://sentinelsignal.io",
+        "SENTINEL_TOKEN_BASE_URL": "https://sentinel-signal-token-service-prod.fly.dev",
         "SENTINEL_API_KEY": "ss_live_or_test_api_key_here",
-        "SENTINEL_API_BASE_URL": "https://sentinelsignal.io",
         "SENTINEL_TIMEOUT_SECONDS": "30"
       }
     }
@@ -59,8 +72,11 @@ If your client accepts a command + args + env definition:
 - command: `uvx`
 - args: `["sentinel-signal-mcp"]`
 - env:
-  - `SENTINEL_API_KEY`
-  - optional `SENTINEL_API_BASE_URL`
+  - optional `SENTINEL_API_KEY` (if omitted, auto-trial mint is used unless disabled)
+  - optional `SENTINEL_BASE_URL`
+  - optional `SENTINEL_TOKEN_BASE_URL`
+  - optional `SENTINEL_CREDENTIALS_PATH`
+  - optional `SENTINEL_NO_TRIAL=1`
   - optional `SENTINEL_TIMEOUT_SECONDS`
 
 ## Tool details
@@ -153,11 +169,55 @@ Example input:
 }
 ```
 
+## Trial key caching (auto-mint mode)
+
+Default cache path:
+
+- `~/.sentinel/credentials.json` (permissions `0600`)
+
+Cached payload includes the trial key plus metadata used by the agent/runtime:
+
+```json
+{
+  "api_key": "ss_trial_...",
+  "account_id": "uuid",
+  "expires_at": "2026-03-10T00:00:00Z",
+  "limits": {
+    "monthly_quota": 1000,
+    "rps": 1,
+    "burst": 5
+  },
+  "upgrade_url": "https://sentinelsignal.io/portal/dashboard",
+  "token_base_url": "https://sentinel-signal-token-service-prod.fly.dev",
+  "api_base_url": "https://sentinelsignal.io"
+}
+```
+
+The MCP server stores both base URLs in the cache so it does not accidentally reuse a trial key across different environments.
+
+Reset the cached credentials (force a fresh trial key next run):
+
+```bash
+uvx sentinel-signal-mcp --reset-credentials
+```
+
 ## Environment variables
 
-- `SENTINEL_API_KEY` (required): API key sent as `Authorization: Bearer <key>`
-- `SENTINEL_API_BASE_URL` (optional, default `https://sentinelsignal.io`)
+- `SENTINEL_BASE_URL` (optional, default `https://sentinelsignal.io`): scoring API base URL
+- `SENTINEL_TOKEN_BASE_URL` (optional, default `https://sentinel-signal-token-service-prod.fly.dev`): token-service base URL used for trial key minting
+- `SENTINEL_API_KEY` (optional): if set, used directly and never cached
+- `SENTINEL_CREDENTIALS_PATH` (optional, default `~/.sentinel/credentials.json`)
+- `SENTINEL_NO_TRIAL` (optional): set to `1` to disable auto-trial minting
 - `SENTINEL_TIMEOUT_SECONDS` (optional, default `30`)
+- `SENTINEL_API_BASE_URL` (legacy alias for `SENTINEL_BASE_URL`)
+
+## Error behavior for agents
+
+The MCP tools return structured error payloads (instead of raw stack traces) for common operational cases:
+
+- quota exhausted / payment required (`402`) -> `{"ok": false, "error": {"action": "upgrade_required", "upgrade_url": "...", ...}}`
+- rate limited (`429`) -> `{"ok": false, "error": {"action": "retry_later", ...}}`
+- auth/config issues (`401`/`403` or missing credentials) -> `{"ok": false, "error": {"action": "configure_credentials", ...}}`
 
 ## Publishing (Python / uvx path)
 
@@ -178,4 +238,5 @@ python -m twine upload dist/*
 
 - Do not commit real API keys or customer payloads.
 - Use placeholder values in client configs and examples.
-- The server only reads credentials from environment variables at runtime.
+- Auto-minted trial credentials are cached locally with file permissions `0600`.
+- Use `SENTINEL_CREDENTIALS_PATH=/tmp/...` for ephemeral environments if you do not want a persistent cache.
