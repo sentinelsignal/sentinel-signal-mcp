@@ -213,7 +213,9 @@ uvx sentinel-signal-mcp --reset-credentials
 
 ## Error behavior for agents
 
-The MCP tools return structured error payloads (instead of raw stack traces) for common operational cases:
+The MCP tools return structured payloads for both success and common operational failures:
+
+- success -> `{"ok": true, ...}`
 
 - quota exhausted / payment required (`402`) -> `{"ok": false, "error": {"action": "upgrade_required", "upgrade_url": "...", ...}}`
 - rate limited (`429`) -> `{"ok": false, "error": {"action": "retry_later", ...}}`

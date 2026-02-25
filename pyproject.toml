@@ -8,14 +8,19 @@ version = "0.1.0"
 description = "Python MCP server for Sentinel Signal scoring, limits, usage, and feedback tools"
 readme = "README.md"
 requires-python = ">=3.10"
-license = { text = "MIT" }
+license = { file = "LICENSE" }
 authors = [
   { name = "Sentinel Signal" }
+]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Environment :: Console",
 ]
 keywords = ["mcp", "model-context-protocol", "sentinel-signal", "api", "agents"]
 dependencies = [
   "httpx>=0.27,<1",
-  "mcp>=1.0.0",
+  "mcp>=1.0.0,<2",
 ]
 
 [project.urls]

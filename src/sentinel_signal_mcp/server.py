@@ -15,8 +15,10 @@ mcp = FastMCP("Sentinel Signal MCP")
 
 def _coerce_success_result(result: Any) -> dict[str, Any]:
     if isinstance(result, dict):
-        return result
-    return {"result": result}
+        if "ok" in result:
+            return result
+        return {"ok": True, **result}
+    return {"ok": True, "result": result}
 
 
 def _tool_error_result(exc: Exception) -> dict[str, Any]:
