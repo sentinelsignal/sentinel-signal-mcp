@@ -24,7 +24,7 @@ import sentinel_signal_mcp.credentials as credentials_mod
 
 def _settings(*, api_key: str | None = None, credentials_path: Path, no_trial: bool = False) -> Settings:
     return Settings(
-        api_base_url="https://sentinelsignal.io",
+        api_base_url="https://api.sentinelsignal.io",
         token_base_url="https://token.sentinelsignal.io",
         api_key=api_key,
         credentials_path=credentials_path,
@@ -39,7 +39,7 @@ class CredentialsCacheTests(unittest.TestCase):
             cred_path = Path(tmp_dir) / "nested" / "credentials.json"
             payload = {
                 "api_key": "ss_trial_example",
-                "api_base_url": "https://sentinelsignal.io",
+                "api_base_url": "https://api.sentinelsignal.io",
                 "token_base_url": "https://token.sentinelsignal.io",
             }
 
@@ -68,13 +68,13 @@ class CredentialsCacheTests(unittest.TestCase):
         self.assertFalse(is_expired({}))
 
         creds = {
-            "api_base_url": "https://sentinelsignal.io/",
+            "api_base_url": "https://api.sentinelsignal.io/",
             "token_base_url": "https://token.sentinelsignal.io/",
         }
         self.assertTrue(
             bases_match(
                 creds,
-                api_base_url="https://sentinelsignal.io",
+                api_base_url="https://api.sentinelsignal.io",
                 token_base_url="https://token.sentinelsignal.io",
             )
         )
@@ -113,7 +113,7 @@ class CredentialResolutionTests(unittest.IsolatedAsyncioTestCase):
                 {
                     "api_key": "ss_trial_cached",
                     "expires_at": expires_at,
-                    "api_base_url": "https://sentinelsignal.io",
+                    "api_base_url": "https://api.sentinelsignal.io",
                     "token_base_url": "https://token.sentinelsignal.io",
                     "upgrade_url": "https://sentinelsignal.io/portal/dashboard",
                 },
@@ -137,7 +137,7 @@ class CredentialResolutionTests(unittest.IsolatedAsyncioTestCase):
                 "expires_at": "2099-01-01T00:00:00Z",
                 "upgrade_url": "https://sentinelsignal.io/portal/dashboard",
                 "limits": {"monthly_quota": 1000, "rps": 1, "burst": 5},
-                "api_base_url": "https://sentinelsignal.io",
+                "api_base_url": "https://api.sentinelsignal.io",
                 "token_base_url": "https://token.sentinelsignal.io",
             }
 

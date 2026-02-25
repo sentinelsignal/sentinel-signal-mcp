@@ -5,7 +5,7 @@ import os
 from pathlib import Path
 
 
-DEFAULT_API_BASE_URL = "https://sentinelsignal.io"
+DEFAULT_API_BASE_URL = "https://api.sentinelsignal.io"
 DEFAULT_TOKEN_BASE_URL = "https://token.sentinelsignal.io"
 DEFAULT_CREDENTIALS_PATH = Path.home() / ".sentinel" / "credentials.json"
 DEFAULT_TIMEOUT_SECONDS = 30.0

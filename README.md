@@ -20,7 +20,7 @@ This package provides a drop-in stdio MCP server so agent clients can call the S
 2. Set env vars (optional `SENTINEL_API_KEY`; if omitted, the server auto-mints a trial key and caches it):
 
 ```bash
-export SENTINEL_BASE_URL="https://sentinelsignal.io"                          # optional (default shown)
+export SENTINEL_BASE_URL="https://api.sentinelsignal.io"                      # optional (default shown)
 export SENTINEL_TOKEN_BASE_URL="https://token.sentinelsignal.io"  # optional (default shown)
 # export SENTINEL_API_KEY="ss_live_or_test_api_key_here"                       # optional
 export SENTINEL_TIMEOUT_SECONDS="30"                                           # optional
@@ -55,7 +55,7 @@ Add this to your MCP config JSON (`mcpServers` section):
       "command": "uvx",
       "args": ["sentinel-signal-mcp"],
       "env": {
-        "SENTINEL_BASE_URL": "https://sentinelsignal.io",
+        "SENTINEL_BASE_URL": "https://api.sentinelsignal.io",
         "SENTINEL_TOKEN_BASE_URL": "https://token.sentinelsignal.io",
         "SENTINEL_API_KEY": "ss_live_or_test_api_key_here",
         "SENTINEL_TIMEOUT_SECONDS": "30"
@@ -189,7 +189,7 @@ Cached payload includes the trial key plus metadata used by the agent/runtime:
   },
   "upgrade_url": "https://sentinelsignal.io/portal/dashboard",
   "token_base_url": "https://token.sentinelsignal.io",
-  "api_base_url": "https://sentinelsignal.io"
+  "api_base_url": "https://api.sentinelsignal.io"
 }
 ```
 
@@ -203,7 +203,7 @@ uvx sentinel-signal-mcp --reset-credentials
 
 ## Environment variables
 
-- `SENTINEL_BASE_URL` (optional, default `https://sentinelsignal.io`): scoring API base URL
+- `SENTINEL_BASE_URL` (optional, default `https://api.sentinelsignal.io`): scoring API base URL
 - `SENTINEL_TOKEN_BASE_URL` (optional, default `https://token.sentinelsignal.io`): token-service base URL used for trial key minting
 - `SENTINEL_API_KEY` (optional): if set, used directly and never cached
 - `SENTINEL_CREDENTIALS_PATH` (optional, default `~/.sentinel/credentials.json`)
