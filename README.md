@@ -16,6 +16,8 @@ export SENTINEL_TOKEN_BASE_URL="https://token.sentinelsignal.io"
 
 Hosted remote MCP endpoint (Streamable HTTP): `https://mcp.sentinelsignal.io/mcp`
 
+Smithery hosted listing: `@sentinelsignal/scoring` (`https://server.smithery.ai/sentinelsignal/scoring`)
+
 If your MCP client supports remote HTTP MCP, point it at that URL and send `Authorization: Bearer <SENTINEL_API_KEY>`.
 
 ### Claude Desktop (drop-in MCP config)
