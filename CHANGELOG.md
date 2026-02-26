@@ -8,6 +8,13 @@ The format is based on Keep a Changelog, and this project follows Semantic Versi
 
 - No unreleased changes yet.
 
+## [0.1.2] - 2026-02-26
+
+- PyPI release: https://pypi.org/project/sentinel-signal-mcp/0.1.2/
+- Added GitHub source metadata URLs for package directories (`Repository`, `Issues`) and set `Homepage` metadata to the PyPI project page.
+- Front-loaded README quickstart with `uvx sentinel-signal-mcp` and drop-in MCP client config snippets.
+- Added LobeHub MCP badge and renamed tools section to `Skills (MCP Tools)`.
+
 ## [0.1.1] - 2026-02-26
 
 - PyPI release: https://pypi.org/project/sentinel-signal-mcp/0.1.1/
