@@ -2,6 +2,52 @@
 
 Python MCP server for Sentinel Signal scoring, limits, usage, and feedback tools.
 
+## Quickstart (10 lines)
+
+```bash
+uvx sentinel-signal-mcp
+export SENTINEL_BASE_URL="https://api.sentinelsignal.io"
+export SENTINEL_TOKEN_BASE_URL="https://token.sentinelsignal.io"
+# Optional: export SENTINEL_API_KEY="ss_live_or_test_api_key_here"
+# If omitted, the MCP server auto-mints a trial key
+```
+
+### Claude Desktop (drop-in MCP config)
+
+```json
+{
+  "mcpServers": {
+    "sentinel-signal": {
+      "command": "uvx",
+      "args": ["sentinel-signal-mcp"],
+      "env": {
+        "SENTINEL_BASE_URL": "https://api.sentinelsignal.io",
+        "SENTINEL_TOKEN_BASE_URL": "https://token.sentinelsignal.io"
+      }
+    }
+  }
+}
+```
+
+### Cursor (same MCP config shape)
+
+```json
+{
+  "mcpServers": {
+    "sentinel-signal": {
+      "command": "uvx",
+      "args": ["sentinel-signal-mcp"],
+      "env": {
+        "SENTINEL_BASE_URL": "https://api.sentinelsignal.io",
+        "SENTINEL_TOKEN_BASE_URL": "https://token.sentinelsignal.io"
+      }
+    }
+  }
+}
+```
+
+Windsurf can use the same `mcpServers` block shape.
+
 This package provides a drop-in stdio MCP server so agent clients can call the Sentinel Signal API through a local tool connector. It supports either:
 
 PyPI: https://pypi.org/project/sentinel-signal-mcp/
