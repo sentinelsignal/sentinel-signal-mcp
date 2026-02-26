@@ -8,6 +8,15 @@ The format is based on Keep a Changelog, and this project follows Semantic Versi
 
 - No unreleased changes yet.
 
+## [0.1.1] - 2026-02-26
+
+- PyPI release: https://pypi.org/project/sentinel-signal-mcp/0.1.1/
+- Added packaging safety bound for MCP dependency (`mcp>=1.0.0,<2`).
+- Added root `LICENSE` file and file-based license metadata for package consumers/scanners.
+- Added Trove classifiers, `dev` optional dependencies, and changelog project URL metadata.
+- Synced default user agent with package version automatically and standardized `ok: true` success responses.
+- Added explicit PyPI links in README and package metadata.
+
 ## [0.1.0] - 2026-02-25
 
 - PyPI release: https://pypi.org/project/sentinel-signal-mcp/0.1.0/
