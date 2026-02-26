@@ -1,5 +1,7 @@
 # Sentinel Signal MCP
 
+[![MCP Badge](https://lobehub.com/badge/mcp/sentinelsignal-sentinel-signal-mcp)](https://lobehub.com/mcp/sentinelsignal-sentinel-signal-mcp)
+
 Python MCP server for Sentinel Signal scoring, limits, usage, and feedback tools.
 
 ## Quickstart (10 lines)
