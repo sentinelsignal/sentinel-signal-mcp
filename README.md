@@ -57,12 +57,12 @@ PyPI: https://pypi.org/project/sentinel-signal-mcp/
 - a user-provided `SENTINEL_API_KEY`, or
 - automatic no-signup trial key minting (`POST /v1/keys/trial`) with secure local credential caching
 
-## MVP tools
+## Skills (MCP Tools)
 
-- `score_workflow` -> `POST /v1/score`
-- `get_limits` -> `GET /v1/limits`
-- `get_usage` -> `GET /v1/usage`
-- `submit_feedback` -> `POST /v1/feedback`
+- `score_workflow` — score a structured payload against a named workflow
+- `get_limits` — retrieve plan limits for the current key
+- `get_usage` — retrieve usage for a given month
+- `submit_feedback` — submit structured outcome feedback
 
 ## Quick start (uvx)
 
