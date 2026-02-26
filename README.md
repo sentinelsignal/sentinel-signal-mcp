@@ -14,6 +14,10 @@ export SENTINEL_TOKEN_BASE_URL="https://token.sentinelsignal.io"
 # If omitted, the MCP server auto-mints a trial key
 ```
 
+Hosted remote MCP endpoint (Streamable HTTP): `https://mcp.sentinelsignal.io/mcp`
+
+If your MCP client supports remote HTTP MCP, point it at that URL and send `Authorization: Bearer <SENTINEL_API_KEY>`.
+
 ### Claude Desktop (drop-in MCP config)
 
 ```json
