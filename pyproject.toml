@@ -27,6 +27,7 @@ dependencies = [
 Homepage = "https://sentinelsignal.io"
 Documentation = "https://sentinelsignal.io/portal"
 Repository = "https://github.com/sentinelsignal/sentinel-signal-mcp"
+PyPI = "https://pypi.org/project/sentinel-signal-mcp/"
 Changelog = "https://github.com/sentinelsignal/sentinel-signal-mcp/blob/main/CHANGELOG.md"
 
 [project.scripts]

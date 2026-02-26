@@ -4,6 +4,8 @@ Python MCP server for Sentinel Signal scoring, limits, usage, and feedback tools
 
 This package provides a drop-in stdio MCP server so agent clients can call the Sentinel Signal API through a local tool connector. It supports either:
 
+PyPI: https://pypi.org/project/sentinel-signal-mcp/
+
 - a user-provided `SENTINEL_API_KEY`, or
 - automatic no-signup trial key minting (`POST /v1/keys/trial`) with secure local credential caching
 
