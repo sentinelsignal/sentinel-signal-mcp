@@ -8,6 +8,12 @@ The format is based on Keep a Changelog, and this project follows Semantic Versi
 
 - No unreleased changes yet.
 
+## [0.1.3] - 2026-02-28
+
+- Repositioned the package as hosted and local MCP access for healthcare claims workflow scoring.
+- Front-loaded hosted MCP endpoint, Smithery listing, and trial-key path in the README.
+- Tightened package metadata keywords/description for healthcare claims discovery.
+
 ## [0.1.2] - 2026-02-26
 
 - PyPI release: https://pypi.org/project/sentinel-signal-mcp/0.1.2/

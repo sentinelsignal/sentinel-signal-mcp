@@ -1,8 +1,15 @@
-# Sentinel Signal MCP
+# Sentinel Signal MCP for Healthcare Claims Scoring
 
 [![MCP Badge](https://lobehub.com/badge/mcp/sentinelsignal-sentinel-signal-mcp)](https://lobehub.com/mcp/sentinelsignal-sentinel-signal-mcp)
 
-Python MCP server for Sentinel Signal scoring, limits, usage, and feedback tools.
+Hosted and local MCP access for healthcare claims workflow scoring, usage, limits, and feedback.
+
+## Hosted First
+
+- Hosted remote MCP endpoint: `https://mcp.sentinelsignal.io/mcp`
+- Smithery listing: `@sentinelsignal/scoring` (`https://server.smithery.ai/sentinelsignal/scoring`)
+- Free no-signup trial key: `POST https://token.sentinelsignal.io/v1/keys/trial`
+- Local package: `uvx sentinel-signal-mcp`
 
 ## Quickstart (10 lines)
 
@@ -18,7 +25,7 @@ Hosted remote MCP endpoint (Streamable HTTP): `https://mcp.sentinelsignal.io/mcp
 
 Smithery hosted listing: `@sentinelsignal/scoring` (`https://server.smithery.ai/sentinelsignal/scoring`)
 
-If your MCP client supports remote HTTP MCP, point it at that URL and send `Authorization: Bearer <SENTINEL_API_KEY>`.
+If your MCP client supports remote HTTP MCP, point it at that URL and send `Authorization: Bearer <SENTINEL_API_KEY>`. For Smithery-hosted connections, the key is forwarded as `x-sentinel-api-key`.
 
 ### Claude Desktop (drop-in MCP config)
 
@@ -56,7 +63,7 @@ If your MCP client supports remote HTTP MCP, point it at that URL and send `Auth
 
 Windsurf can use the same `mcpServers` block shape.
 
-This package provides a drop-in stdio MCP server so agent clients can call the Sentinel Signal API through a local tool connector. It supports either:
+This package provides a local stdio MCP server, while the hosted remote service exposes the same healthcare claims tools over Streamable HTTP. It supports either:
 
 PyPI: https://pypi.org/project/sentinel-signal-mcp/
 
@@ -65,7 +72,7 @@ PyPI: https://pypi.org/project/sentinel-signal-mcp/
 
 ## Skills (MCP Tools)
 
-- `score_workflow` — score a structured payload against a named workflow
+- `score_workflow` — score denial risk, prior auth, and reimbursement payloads against a named workflow
 - `get_limits` — retrieve plan limits for the current key
 - `get_usage` — retrieve usage for a given month
 - `submit_feedback` — submit structured outcome feedback
