@@ -8,6 +8,12 @@ The format is based on Keep a Changelog, and this project follows Semantic Versi
 
 - No unreleased changes yet.
 
+## [0.1.4] - 2026-03-03
+
+- Added local MCP tools for workflow discovery, workflow schema lookup, payload validation, and batch scoring.
+- Expanded the README to document the new workflow-discovery and batch-scoring tool surface.
+
+
 ## [0.1.3] - 2026-02-28
 
 - Repositioned the package as hosted and local MCP access for healthcare claims workflow scoring.
