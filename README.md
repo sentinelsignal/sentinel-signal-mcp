@@ -72,7 +72,11 @@ PyPI: https://pypi.org/project/sentinel-signal-mcp/
 
 ## Skills (MCP Tools)
 
+- `list_workflows` — list supported workflows and current model versions
+- `get_workflow_schema` — fetch required fields, optional fields, and an example payload for a workflow
+- `validate_workflow_payload` — validate and normalize a workflow payload before scoring
 - `score_workflow` — score denial risk, prior auth, and reimbursement payloads against a named workflow
+- `score_batch` — score up to 25 workflow items in one request
 - `get_limits` — retrieve plan limits for the current key
 - `get_usage` — retrieve usage for a given month
 - `submit_feedback` — submit structured outcome feedback
@@ -144,6 +148,29 @@ If your client accepts a command + args + env definition:
 
 ## Tool details
 
+### `list_workflows`
+
+Calls `GET /v1/workflows` so agents can discover the supported healthcare workflows and current model versions before scoring.
+
+No arguments.
+
+### `get_workflow_schema`
+
+Calls `GET /v1/workflows/{workflow}/schema` so agents can fetch required fields, optional fields, enums, and example payloads before issuing a score.
+
+Arguments:
+
+- `workflow` (`str`): workflow ID such as `healthcare.denial`
+
+### `validate_workflow_payload`
+
+Calls `POST /v1/workflows/{workflow}/validate` and returns normalized payload output plus structured validation issues without consuming a scoring call.
+
+Arguments:
+
+- `workflow` (`str`): workflow ID such as `healthcare.denial`
+- `payload` (`object`): workflow payload object to validate
+
 ### `score_workflow`
 
 Calls the Sentinel Signal unified scoring endpoint (`POST /v1/score`).
@@ -203,6 +230,15 @@ Calls `GET /v1/usage`.
 Arguments:
 
 - `month` (`str`, optional): month filter (for example `2026-02`)
+
+### `score_batch`
+
+Calls `POST /v1/score/batch` to score up to 25 workflow items sequentially in one request.
+
+Arguments:
+
+- `items` (`array`): list of `{workflow, payload, options?}` scoring items
+- `continue_on_error` (`bool`, optional): whether later items should continue if an earlier item fails
 
 ### `submit_feedback`
 

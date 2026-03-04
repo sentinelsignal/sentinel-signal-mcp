@@ -75,10 +75,50 @@ async def get_limits() -> dict[str, Any]:
 
 
 @mcp.tool()
+async def list_workflows() -> dict[str, Any]:
+    """List supported workflows and current model versions (GET /v1/workflows)."""
+    try:
+        result = await client.list_workflows()
+    except Exception as exc:
+        return _tool_error_result(exc)
+    return _coerce_success_result(result)
+
+
+@mcp.tool()
+async def get_workflow_schema(workflow: str) -> dict[str, Any]:
+    """Fetch required fields, optional fields, and example payloads for a workflow (GET /v1/workflows/{workflow}/schema)."""
+    try:
+        result = await client.get_workflow_schema(workflow=workflow)
+    except Exception as exc:
+        return _tool_error_result(exc)
+    return _coerce_success_result(result)
+
+
+@mcp.tool()
+async def validate_workflow_payload(workflow: str, payload: dict[str, Any]) -> dict[str, Any]:
+    """Validate and normalize a workflow payload without consuming a scoring call (POST /v1/workflows/{workflow}/validate)."""
+    try:
+        result = await client.validate_workflow_payload(workflow=workflow, payload=payload)
+    except Exception as exc:
+        return _tool_error_result(exc)
+    return _coerce_success_result(result)
+
+
+@mcp.tool()
 async def get_usage(month: str | None = None) -> dict[str, Any]:
     """Return usage for the current API key (GET /v1/usage). Optional month format: YYYY-MM."""
     try:
         result = await client.get_usage(month=month)
+    except Exception as exc:
+        return _tool_error_result(exc)
+    return _coerce_success_result(result)
+
+
+@mcp.tool()
+async def score_batch(items: list[dict[str, Any]], continue_on_error: bool = True) -> dict[str, Any]:
+    """Score up to 25 workflow items sequentially in one request (POST /v1/score/batch)."""
+    try:
+        result = await client.score_batch(items=items, continue_on_error=continue_on_error)
     except Exception as exc:
         return _tool_error_result(exc)
     return _coerce_success_result(result)

@@ -209,11 +209,31 @@ async def get_limits() -> Any:
     return await _request("GET", "/v1/limits")
 
 
+async def list_workflows() -> Any:
+    return await _request("GET", "/v1/workflows")
+
+
+async def get_workflow_schema(*, workflow: str) -> Any:
+    return await _request("GET", f"/v1/workflows/{workflow}/schema")
+
+
+async def validate_workflow_payload(*, workflow: str, payload: dict[str, Any]) -> Any:
+    return await _request("POST", f"/v1/workflows/{workflow}/validate", json_body={"payload": payload})
+
+
 async def get_usage(*, month: str | None = None) -> Any:
     params: dict[str, Any] | None = None
     if month:
         params = {"month": month}
     return await _request("GET", "/v1/usage", params=params)
+
+
+async def score_batch(*, items: list[dict[str, Any]], continue_on_error: bool = True) -> Any:
+    return await _request(
+        "POST",
+        "/v1/score/batch",
+        json_body={"items": items, "continue_on_error": continue_on_error},
+    )
 
 
 async def submit_feedback(*, feedback: dict[str, Any]) -> Any:
