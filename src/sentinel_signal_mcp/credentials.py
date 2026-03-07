@@ -27,6 +27,14 @@ class CredentialResolutionError(RuntimeError):
     """Raised when the MCP server cannot resolve a usable Sentinel API key."""
 
 
+class TrialKeyRateLimitedError(CredentialResolutionError):
+    """Raised when trial key minting is rate limited upstream."""
+
+    def __init__(self, message: str, *, retry_after_seconds: int | None = None) -> None:
+        super().__init__(message)
+        self.retry_after_seconds = retry_after_seconds
+
+
 def _parse_dt(value: str) -> datetime:
     return datetime.fromisoformat(value.replace("Z", "+00:00"))
 
@@ -82,6 +90,17 @@ def _validate_cached_credentials(creds: dict[str, Any]) -> bool:
     return isinstance(api_key, str) and bool(api_key.strip())
 
 
+def _parse_retry_after_seconds(response: httpx.Response) -> int | None:
+    raw = (response.headers.get("retry-after") or "").strip()
+    if not raw:
+        return None
+    try:
+        value = int(raw)
+    except ValueError:
+        return None
+    return value if value >= 0 else None
+
+
 async def fetch_trial_key(settings: Settings) -> dict[str, Any]:
     url = f"{settings.token_base_url}/v1/keys/trial"
     headers = {
@@ -100,6 +119,11 @@ async def fetch_trial_key(settings: Settings) -> dict[str, Any]:
         payload = {"raw_text": response.text}
 
     if response.is_error:
+        if response.status_code == 429:
+            raise TrialKeyRateLimitedError(
+                f"Trial key mint failed ({response.status_code}): {payload}",
+                retry_after_seconds=_parse_retry_after_seconds(response),
+            )
         raise CredentialResolutionError(
             f"Trial key mint failed ({response.status_code}): {payload}"
         )

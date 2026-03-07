@@ -8,6 +8,11 @@ The format is based on Keep a Changelog, and this project follows Semantic Versi
 
 - No unreleased changes yet.
 
+## [0.1.5] - 2026-03-07
+
+- Added typed handling for trial-key mint rate limits, including parsed `Retry-After` support.
+- Improved credential resolution tests to cover upstream trial-key throttling behavior.
+
 ## [0.1.4] - 2026-03-03
 
 - Added local MCP tools for workflow discovery, workflow schema lookup, payload validation, and batch scoring.

@@ -12,7 +12,9 @@ from unittest.mock import patch
 from sentinel_signal_mcp.config import Settings
 from sentinel_signal_mcp.credentials import (
     CredentialResolutionError,
+    TrialKeyRateLimitedError,
     bases_match,
+    fetch_trial_key,
     is_expired,
     load_cached_credentials,
     remove_cached_credentials,
@@ -160,6 +162,44 @@ class CredentialResolutionTests(unittest.IsolatedAsyncioTestCase):
             settings = _settings(credentials_path=Path(tmp_dir) / "credentials.json", no_trial=True)
             with self.assertRaises(CredentialResolutionError):
                 await resolve_credentials(settings)
+
+
+class TrialKeyFetchTests(unittest.IsolatedAsyncioTestCase):
+    async def test_fetch_trial_key_raises_typed_rate_limit_error(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            settings = _settings(credentials_path=Path(tmp_dir) / "credentials.json")
+
+            class _FakeResponse:
+                status_code = 429
+                headers = {"retry-after": "86400"}
+                text = '{"detail": "Trial key issuance limit reached for this IP"}'
+
+                @property
+                def is_error(self) -> bool:
+                    return True
+
+                def json(self) -> dict[str, str]:
+                    return {"detail": "Trial key issuance limit reached for this IP"}
+
+            class _FakeAsyncClient:
+                def __init__(self, *args, **kwargs) -> None:
+                    return None
+
+                async def __aenter__(self):
+                    return self
+
+                async def __aexit__(self, exc_type, exc, tb) -> bool:
+                    return False
+
+                async def post(self, url: str):
+                    return _FakeResponse()
+
+            with patch("httpx.AsyncClient", _FakeAsyncClient):
+                with self.assertRaises(TrialKeyRateLimitedError) as excinfo:
+                    await fetch_trial_key(settings)
+
+            self.assertEqual(excinfo.exception.retry_after_seconds, 86400)
+            self.assertIn("Trial key issuance limit reached for this IP", str(excinfo.exception))
 
 
 if __name__ == "__main__":
